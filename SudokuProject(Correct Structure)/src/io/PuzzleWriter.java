@@ -1,4 +1,4 @@
-package sudokuproject.io;
+package io;
 
 import model.SudokuBoard;
 import java.io.*;
