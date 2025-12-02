@@ -21,9 +21,13 @@ public class SudokuGui extends JFrame {
 
     private final JTextField[][] cells = new JTextField[SIZE][SIZE];
     private final JLabel statusLabel = new JLabel(" ");
+    // tracking solve performance
+    private final JLabel avgTimeLabel = new JLabel("Avg solve time: -");
+    private long totalSolveNanos = 0L;
+    private int solveCount = 0;
 
     public SudokuGui() {
-        super("Sudoku — GUI");
+        super("Sudoku Solver");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         createUi();
         pack();
@@ -80,8 +84,14 @@ public class SudokuGui extends JFrame {
 
         JPanel south = new JPanel(new BorderLayout());
         south.add(controlPanel, BorderLayout.CENTER);
+
+        JPanel stats = new JPanel(new BorderLayout());
+        avgTimeLabel.setBorder(BorderFactory.createEmptyBorder(6, 6, 6, 6));
         statusLabel.setBorder(BorderFactory.createEmptyBorder(6, 6, 6, 6));
-        south.add(statusLabel, BorderLayout.SOUTH);
+        stats.add(avgTimeLabel, BorderLayout.WEST);
+        stats.add(statusLabel, BorderLayout.CENTER);
+
+        south.add(stats, BorderLayout.SOUTH);
 
         root.add(south, BorderLayout.SOUTH);
 
@@ -107,7 +117,8 @@ public class SudokuGui extends JFrame {
     }
 
     private void loadSample() {
-        // sample puzzle included in repository under puzzles/sample_easy.txt
+        // sample puzzle included in repository under SudokuProject(Correct
+        // Structure)puzzles/sample_easy.txt
         try {
             String path = "SudokuProject(Correct Structure)/puzzles/sample_easy.txt";
             SudokuBoard board = new SudokuIO().loadPuzzle(path);
@@ -133,15 +144,24 @@ public class SudokuGui extends JFrame {
         try {
             int[][] grid = readGridFromUi();
             SequentialSudokuSolver solver = new SequentialSudokuSolver();
+            long start = System.nanoTime();
             boolean solved = solver.solve(grid);
+            long duration = System.nanoTime() - start;
+
+            // update average timing stats
+            totalSolveNanos += duration;
+            solveCount++;
+            double avgMs = (totalSolveNanos / (double) solveCount) / 1_000_000.0;
+
             if (solved) {
                 SudokuBoard result = new SudokuBoard(grid);
                 loadBoardToUi(result);
-                // saving feature removed — we still display solved board
-                setStatus("Solved ✓");
+                setStatus(String.format("Solved ✓ (last: %.2f ms)", duration / 1_000_000.0));
             } else {
-                setStatus("No solution found");
+                setStatus(String.format("No solution found (last: %.2f ms)", duration / 1_000_000.0));
             }
+
+            avgTimeLabel.setText(String.format("Avg solve time: %.2f ms", avgMs, solveCount));
         } catch (IllegalArgumentException ex) {
             showError("Invalid board: " + ex.getMessage());
         }
