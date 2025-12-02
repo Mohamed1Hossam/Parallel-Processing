@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/Parallel-Processing.iml" filepath="$PROJECT_DIR$/.idea/Parallel-Processing.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SudokuProject/SudokuProject.iml" filepath="$PROJECT_DIR$/SudokuProject/SudokuProject.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SudokuProject(Correct Structure)/SudokuProject(Correct Structure).iml" filepath="$PROJECT_DIR$/SudokuProject(Correct Structure)/SudokuProject(Correct Structure).iml" />
+    </modules>
+  </component>
+</project>
