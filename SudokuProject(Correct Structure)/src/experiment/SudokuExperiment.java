@@ -3,7 +3,7 @@ package experiment;
 import io.SudokuIO;
 import solver.SudokuSolver;
 import solver.SequentialSudokuSolver;
-//import solver.ParallelSudokuSolver;
+import solver.ParallelSudokuSolver;
 import model.SudokuBoard;
 
 import java.util.ArrayList;
@@ -36,24 +36,24 @@ public class SudokuExperiment {
                 long endSeq = System.currentTimeMillis();
 
 
-//                SudokuSolver parSolver = new ParallelSudokuSolver();
-//                int[][] parBoard = board.toArray();  // Use toArray() method
-//                long startPar = System.currentTimeMillis();
-//                boolean parSuccess = parSolver.solve(parBoard);
-//                long endPar = System.currentTimeMillis();
+                SudokuSolver parSolver = new ParallelSudokuSolver();
+                int[][] parBoard = board.toArray();  // Use toArray() method
+                long startPar = System.currentTimeMillis();
+                boolean parSuccess = parSolver.solve(parBoard);
+                long endPar = System.currentTimeMillis();
 
 
                 ResultRecord r = new ResultRecord();
                 r.puzzleName = file;
                 r.difficulty = file.replace(".txt", "");
                 r.sequentialTime = endSeq - startSeq;
-//                r.parallelTime = endPar - startPar;
+                r.parallelTime = endPar - startPar;
 
                 results.add(r);
 
                 // Print results
                 System.out.println("  Sequential: " + r.sequentialTime + " ms (solved: " + seqSuccess + ")");
-//                System.out.println("  Parallel:   " + r.parallelTime + " ms (solved: " + parSuccess + ")");
+                System.out.println("  Parallel:   " + r.parallelTime + " ms (solved: " + parSuccess + ")");
                 System.out.println("  Speedup:    " + String.format("%.2f", r.getSpeedup()) + "x\n");
 
             } catch (Exception e) {
