@@ -135,7 +135,7 @@ public class SudokuGui extends JFrame {
                 this.cells[r][c].setText(v == 0 ? "" : Integer.toString(v));
             }
         }
-        highlightConflicts();
+        // highlightConflicts();
     }
 
     /**
@@ -237,41 +237,41 @@ public class SudokuGui extends JFrame {
         this.setStatus("Cleared");
     }
 
-    private void highlightConflicts() {
-        int[][] tmp = new int[SIZE][SIZE];
+    // private void highlightConflicts() {
+    //     int[][] tmp = new int[SIZE][SIZE];
 
-        for (int r = 0; r < SIZE; ++r) {
-            for (int c = 0; c < SIZE; ++c) {
-                String t = this.cells[r][c].getText().trim();
-                tmp[r][c] = t.isEmpty() ? 0 : Integer.parseInt(t);
-            }
-        }
+    //     for (int r = 0; r < SIZE; ++r) {
+    //         for (int c = 0; c < SIZE; ++c) {
+    //             String t = this.cells[r][c].getText().trim();
+    //             tmp[r][c] = t.isEmpty() ? 0 : Integer.parseInt(t);
+    //         }
+    //     }
 
-        SudokuBoard model;
-        try {
-            model = new SudokuBoard(tmp);
-        } catch (IllegalArgumentException ex) {
-            model = new SudokuBoard();
-        }
+    //     SudokuBoard model;
+    //     try {
+    //         model = new SudokuBoard(tmp);
+    //     } catch (IllegalArgumentException ex) {
+    //         model = new SudokuBoard();
+    //     }
 
-        for (int r = 0; r < SIZE; ++r) {
-            for (int c = 0; c < SIZE; ++c) {
-                JTextField tf = this.cells[r][c];
-                String t = tf.getText().trim();
-                if (t.isEmpty()) {
-                    tf.setBackground(Color.WHITE);
-                } else {
-                    try {
-                        int v = Integer.parseInt(t);
-                        boolean ok = model.isValidMove(r, c, v);
-                        tf.setBackground(ok ? Color.WHITE : new Color(255, 200, 200));
-                    } catch (Throwable ex) {
-                        tf.setBackground(new Color(255, 230, 200));
-                    }
-                }
-            }
-        }
-    }
+    //     for (int r = 0; r < SIZE; ++r) {
+    //         for (int c = 0; c < SIZE; ++c) {
+    //             JTextField tf = this.cells[r][c];
+    //             String t = tf.getText().trim();
+    //             if (t.isEmpty()) {
+    //                 tf.setBackground(Color.WHITE);
+    //             } else {
+    //                 try {
+    //                     int v = Integer.parseInt(t);
+    //                     boolean ok = model.isValidMove(r, c, v);
+    //                     tf.setBackground(ok ? Color.WHITE : new Color(255, 200, 200));
+    //                 } catch (Throwable ex) {
+    //                     tf.setBackground(new Color(255, 230, 200));
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
 
     private void setControlsEnabled(boolean enabled) {
         loadButton.setEnabled(enabled);
