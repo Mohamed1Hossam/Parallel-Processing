@@ -72,7 +72,7 @@ public class SudokuGui extends JFrame {
         // Controls
         JPanel controlRow = new JPanel(new FlowLayout(FlowLayout.CENTER, 8, 8));
         loadButton = new JButton("Load file");
-        sampleButton = new JButton("Load sample");
+        sampleButton = new JButton("Load Diffculty");
         solveButton = new JButton("Solve");
         clearButton = new JButton("Clear");
         experimentButton = new JButton("Run Experiment");
