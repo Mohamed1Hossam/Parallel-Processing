@@ -1,4 +1,4 @@
 Puzzle,Difficulty,Sequential(ms),Parallel(ms),Speedup
-SudokuProject(Correct Structure)\puzzles\easy.txt,SudokuProject(Correct Structure)\puzzles\easy,2,2,1.0
-SudokuProject(Correct Structure)\puzzles\medium.txt,SudokuProject(Correct Structure)\puzzles\medium,47,44,1.0681818181818181
-SudokuProject(Correct Structure)\puzzles\hard.txt,SudokuProject(Correct Structure)\puzzles\hard,2623,2616,1.0026758409785932
+SudokuProject(Correct Structure)\puzzles\easy.txt,SudokuProject(Correct Structure)\puzzles\easy,2,1,2.0
+SudokuProject(Correct Structure)\puzzles\medium.txt,SudokuProject(Correct Structure)\puzzles\medium,41,42,0.9761904761904762
+SudokuProject(Correct Structure)\puzzles\hard.txt,SudokuProject(Correct Structure)\puzzles\hard,2568,2627,0.977540921202893
