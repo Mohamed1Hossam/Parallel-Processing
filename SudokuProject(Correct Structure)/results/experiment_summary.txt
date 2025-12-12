@@ -1,4 +1,4 @@
 === Experiment Summary ===
-Average Sequential Time: 1213.0 ms
-Average Parallel Time:   500.0 ms
-Average Speedup:         2.426
+Average Sequential Time: 877.3333333333334 ms
+Average Parallel Time:   1895.6666666666667 ms
+Average Speedup:         0.4628099173553719
