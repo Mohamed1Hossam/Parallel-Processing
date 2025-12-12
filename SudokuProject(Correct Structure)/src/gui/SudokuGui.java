@@ -25,6 +25,7 @@ public class SudokuGui extends JFrame {
 
     // Solver choice UI
     private JComboBox<String> solverChoice;
+    private JComboBox<String> difficultyChoice;
     private JButton solveButton;
     private JButton loadButton;
     private JButton sampleButton;
@@ -81,6 +82,11 @@ public class SudokuGui extends JFrame {
         controlRow.add(new JLabel("Solver:"));
         controlRow.add(solverChoice);
 
+        // Difficulty selection
+        difficultyChoice = new JComboBox<>(new String[] { "Easy", "Medium", "Hard" });
+        controlRow.add(new JLabel("Difficulty:"));
+        controlRow.add(difficultyChoice);
+
         controlRow.add(loadButton);
         controlRow.add(sampleButton);
         controlRow.add(solveButton);
@@ -124,12 +130,21 @@ public class SudokuGui extends JFrame {
 
     private void loadSample() {
         try {
-            String path = "SudokuProject(Correct Structure)/puzzles/sample_easy.txt";
+            String difficulty = (String) difficultyChoice.getSelectedItem();
+            String fileName;
+            if ("Easy".equals(difficulty)) {
+                fileName = "easy.txt";
+            } else if ("Medium".equals(difficulty)) {
+                fileName = "medium.txt";
+            } else {
+                fileName = "hard.txt";
+            }
+            String path = "SudokuProject(Correct Structure)\\puzzles\\" + fileName;
             SudokuBoard board = (new SudokuIO()).loadPuzzle(path);
             loadBoardToUi(board);
-            setStatus("Loaded sample puzzle");
+            setStatus("Loaded " + difficulty.toLowerCase() + " puzzle");
         } catch (IllegalArgumentException | IOException ex) {
-            showError("Failed to load sample: " + ex.getMessage());
+            showError("Failed to load puzzle: " + ex.getMessage());
         }
     }
 
@@ -327,6 +342,7 @@ public class SudokuGui extends JFrame {
         clearButton.setEnabled(enabled);
         experimentButton.setEnabled(enabled);
         solverChoice.setEnabled(enabled);
+        difficultyChoice.setEnabled(enabled);
     }
 
     private void setStatus(String s) {
