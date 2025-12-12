@@ -4,6 +4,7 @@ import io.SudokuIO;
 import model.SudokuBoard;
 import solver.SequentialSudokuSolver;
 import solver.ParallelSudokuSolver;
+import experiment.SudokuExperiment;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -28,6 +29,7 @@ public class SudokuGui extends JFrame {
     private JButton loadButton;
     private JButton sampleButton;
     private JButton clearButton;
+    private JButton experimentButton;
 
     public SudokuGui() {
         super("Sudoku game");
@@ -72,6 +74,7 @@ public class SudokuGui extends JFrame {
         sampleButton = new JButton("Load sample");
         solveButton = new JButton("Solve");
         clearButton = new JButton("Clear");
+        experimentButton = new JButton("Run Experiment");
 
         // Solver selection
         solverChoice = new JComboBox<>(new String[] { "Sequential Solver", "Parallel Solver" });
@@ -82,11 +85,13 @@ public class SudokuGui extends JFrame {
         controlRow.add(sampleButton);
         controlRow.add(solveButton);
         controlRow.add(clearButton);
+        controlRow.add(experimentButton);
 
         loadButton.addActionListener(this::onLoadFile);
         sampleButton.addActionListener(e -> loadSample());
         solveButton.addActionListener(this::onSolve);
         clearButton.addActionListener(e -> clearBoard());
+        experimentButton.addActionListener(this::onRunExperiment);
 
         JPanel south = new JPanel(new BorderLayout());
         south.add(controlRow, BorderLayout.CENTER);
@@ -200,6 +205,36 @@ public class SudokuGui extends JFrame {
         worker.execute();
     }
 
+    private void onRunExperiment(ActionEvent ev) {
+        // disable UI controls while running experiment
+        setControlsEnabled(false);
+        setStatus("Running experiment...");
+
+        // SwingWorker to run experiment off EDT
+        SwingWorker<String, Void> worker = new SwingWorker<String, Void>() {
+            @Override
+            protected String doInBackground() {
+                SudokuExperiment exp = new SudokuExperiment();
+                return exp.runAndGetOutput();
+            }
+
+            @Override
+            protected void done() {
+                try {
+                    String results = get();
+                    showResultsDialog(results);
+                    setStatus("Experiment completed");
+                } catch (Exception ex) {
+                    showError("Experiment error: " + ex.getMessage());
+                } finally {
+                    setControlsEnabled(true);
+                }
+            }
+        };
+
+        worker.execute();
+    }
+
     private int[][] readGridFromUi() {
         int[][] grid = new int[SIZE][SIZE];
 
@@ -237,40 +272,52 @@ public class SudokuGui extends JFrame {
         this.setStatus("Cleared");
     }
 
+    private void showResultsDialog(String results) {
+        JDialog dialog = new JDialog(this, "Experiment Results", true);
+        JTextArea textArea = new JTextArea(results);
+        textArea.setEditable(false);
+        textArea.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        dialog.add(scrollPane);
+        dialog.setSize(600, 400);
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
+    }
+
     // private void highlightConflicts() {
-    //     int[][] tmp = new int[SIZE][SIZE];
+    // int[][] tmp = new int[SIZE][SIZE];
 
-    //     for (int r = 0; r < SIZE; ++r) {
-    //         for (int c = 0; c < SIZE; ++c) {
-    //             String t = this.cells[r][c].getText().trim();
-    //             tmp[r][c] = t.isEmpty() ? 0 : Integer.parseInt(t);
-    //         }
-    //     }
+    // for (int r = 0; r < SIZE; ++r) {
+    // for (int c = 0; c < SIZE; ++c) {
+    // String t = this.cells[r][c].getText().trim();
+    // tmp[r][c] = t.isEmpty() ? 0 : Integer.parseInt(t);
+    // }
+    // }
 
-    //     SudokuBoard model;
-    //     try {
-    //         model = new SudokuBoard(tmp);
-    //     } catch (IllegalArgumentException ex) {
-    //         model = new SudokuBoard();
-    //     }
+    // SudokuBoard model;
+    // try {
+    // model = new SudokuBoard(tmp);
+    // } catch (IllegalArgumentException ex) {
+    // model = new SudokuBoard();
+    // }
 
-    //     for (int r = 0; r < SIZE; ++r) {
-    //         for (int c = 0; c < SIZE; ++c) {
-    //             JTextField tf = this.cells[r][c];
-    //             String t = tf.getText().trim();
-    //             if (t.isEmpty()) {
-    //                 tf.setBackground(Color.WHITE);
-    //             } else {
-    //                 try {
-    //                     int v = Integer.parseInt(t);
-    //                     boolean ok = model.isValidMove(r, c, v);
-    //                     tf.setBackground(ok ? Color.WHITE : new Color(255, 200, 200));
-    //                 } catch (Throwable ex) {
-    //                     tf.setBackground(new Color(255, 230, 200));
-    //                 }
-    //             }
-    //         }
-    //     }
+    // for (int r = 0; r < SIZE; ++r) {
+    // for (int c = 0; c < SIZE; ++c) {
+    // JTextField tf = this.cells[r][c];
+    // String t = tf.getText().trim();
+    // if (t.isEmpty()) {
+    // tf.setBackground(Color.WHITE);
+    // } else {
+    // try {
+    // int v = Integer.parseInt(t);
+    // boolean ok = model.isValidMove(r, c, v);
+    // tf.setBackground(ok ? Color.WHITE : new Color(255, 200, 200));
+    // } catch (Throwable ex) {
+    // tf.setBackground(new Color(255, 230, 200));
+    // }
+    // }
+    // }
+    // }
     // }
 
     private void setControlsEnabled(boolean enabled) {
@@ -278,6 +325,7 @@ public class SudokuGui extends JFrame {
         sampleButton.setEnabled(enabled);
         solveButton.setEnabled(enabled);
         clearButton.setEnabled(enabled);
+        experimentButton.setEnabled(enabled);
         solverChoice.setEnabled(enabled);
     }
 
