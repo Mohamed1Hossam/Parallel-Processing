@@ -9,12 +9,12 @@ public class ExperimentTableExporter {
     public void exportCSV(List<ResultRecord> results, String filename) {
         try {
             PrintWriter writer = new PrintWriter(new FileWriter(filename));
-            writer.println("Puzzle,Difficulty,Sequential(ms),Parallel(ms),Speedup");
+            writer.println("Difficulty,Sequential(ms),Parallel(depth=1),Parallel(depth=2),Parallel(depth=3) ,Speedup");
 
             for (int i = 0; i < results.size(); i++) {
                 ResultRecord r = results.get(i);
-                writer.println(r.puzzleName + "," + r.difficulty + "," +
-                               r.sequentialTime + "," + r.parallelTime + "," +
+                writer.println( r.difficulty + "," +
+                               r.sequentialTime + "," + r.parallelTime + "," + r.parallelTime2 +","+ r.parallelTime3+","+
                                r.getSpeedup());
             }
             writer.close();
