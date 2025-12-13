@@ -4,15 +4,12 @@ import model.SudokuBoard;
 import java.io.*;
 import java.util.*;
 
-/**
- * Loads Sudoku puzzles from files or arrays.
- * Supports space, comma, or no separator formats.
- */
+
 public class PuzzleLoader {
 
     private static final int SIZE = 9;
 
-    // Load puzzle from a file
+    
     public SudokuBoard loadFromFile(String filename) throws IOException {
         List<String> lines = readLines(filename);
         int[][] grid = parseLines(lines);
@@ -20,7 +17,7 @@ public class PuzzleLoader {
         return new SudokuBoard(grid);
     }
 
-    // Load puzzle from a 2D array
+    
     public SudokuBoard loadFromArray(int[][] grid) {
         validateGrid(grid);
         int[][] copy = new int[SIZE][SIZE];
@@ -28,7 +25,7 @@ public class PuzzleLoader {
         return new SudokuBoard(copy);
     }
 
-    // Read non-empty lines, skip comments
+    
     private List<String> readLines(String filename) throws IOException {
         List<String> lines = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
@@ -43,7 +40,7 @@ public class PuzzleLoader {
         return lines;
     }
 
-    // Convert lines to a 9x9 grid
+    
     private int[][] parseLines(List<String> lines) {
         if (lines.size() != SIZE) throw new IllegalArgumentException("Expected 9 lines, found " + lines.size());
         int[][] grid = new int[SIZE][SIZE];
@@ -51,7 +48,7 @@ public class PuzzleLoader {
         return grid;
     }
 
-    // Convert a single line to integers
+    
     private int[] parseLine(String line, int row) {
         line = line.trim();
         String[] tokens;
@@ -75,7 +72,7 @@ public class PuzzleLoader {
         return rowData;
     }
 
-    // Check grid size and values
+    
     private void validateGrid(int[][] grid) {
         if (grid == null || grid.length != SIZE) throw new IllegalArgumentException("Grid must have 9 rows");
         for (int r = 0; r < SIZE; r++) {
